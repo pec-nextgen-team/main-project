@@ -1,4 +1,7 @@
-
+.env
+.env
+.env.*
+!.env.example
 /src/generated/prisma
 node_modules/
 .env
