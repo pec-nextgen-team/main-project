@@ -1,11 +1,1 @@
-
-/src/generated/prisma
-node_modules/
-.env
-.env.*
-# AI Skills & Tooling
-skills-lock.json
-.claude/
-.agents/
-.windsurf/
-*skills*/
+git add backend/.gitignore backend/.env.example
