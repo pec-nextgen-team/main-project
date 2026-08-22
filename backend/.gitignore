@@ -3,6 +3,9 @@
 node_modules/
 .env
 .env.*
-.agents/
+# AI Skills & Tooling
+skills-lock.json
 .claude/
+.agents/
 .windsurf/
+*skills*/
