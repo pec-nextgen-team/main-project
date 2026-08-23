@@ -8,12 +8,13 @@ datasource db {
 }
 
 enum UserRole {
-  ADMIN
+  SUPERVISOR
+  ELECTRICIAN_INCHARGE
   HOD
-  FACULTY_STAFF
-  TECHNICIAN
-  SERVICE_PROVIDER
-  IQAC_NAAC
+  ELECTRICIAN_HEAD
+  ELECTRICIAN
+  MANAGER
+  DEAN_IQAC
 }
 
 enum ComplaintCategory {
@@ -95,6 +96,7 @@ model Department {
 
   users      User[]
   complaints Complaint[]
+  equipment  Equipment[]
 }
 
 model User {
@@ -113,15 +115,17 @@ model User {
 
   department Department? @relation(fields: [departmentId], references: [id])
 
-  complaintsReported Complaint[]         @relation("ComplaintReporter")
-  complaintsApproved Complaint[]         @relation("ComplaintApprover")
+  complaintsReported Complaint[]              @relation("ComplaintReporter")
+  complaintsApproved Complaint[]              @relation("ComplaintApprover")
   assignments        Assignment[]
-  inspections        Inspection[]        @relation("Inspector")
-  atrs               ActionTakenReport[] @relation("ATRSubmittedBy")
-  verifications      Verification[]      @relation("Verifier")
+  statusChanges      ComplaintStatusHistory[] @relation("StatusHistoryChangedBy")
+  assignmentsMade    Assignment[]             @relation("AssignmentAssignedBy")
+  inspections        Inspection[]             @relation("Inspector")
+  atrs               ActionTakenReport[]      @relation("ATRSubmittedBy")
+  verifications      Verification[]           @relation("Verifier")
   notifications      Notification[]
   auditLogs          AuditLog[]
-  escalationsRaised  Escalation[]        @relation("EscalationRaisedBy")
+  escalationsRaised  Escalation[]             @relation("EscalationRaisedBy")
 }
 
 model Equipment {
@@ -135,6 +139,7 @@ model Equipment {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  department Department? @relation(fields: [departmentId], references: [id])
   complaints Complaint[]
 }
 
@@ -219,6 +224,7 @@ model Assignment {
 
   complaint  Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
   technician User      @relation(fields: [technicianId], references: [id])
+  assignedBy User?     @relation("AssignmentAssignedBy", fields: [assignedById], references: [id])
 }
 
 model ActionTakenReport {
@@ -255,6 +261,7 @@ model ComplaintStatusHistory {
   changedAt   DateTime        @default(now())
 
   complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  changedBy User?     @relation("StatusHistoryChangedBy", fields: [changedById], references: [id])
 }
 
 model Escalation {
