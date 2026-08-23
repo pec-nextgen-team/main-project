@@ -21,12 +21,19 @@ jobs:
         id: pragent
         uses: qodo-ai/pr-agent@main
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENAI_BASE_URL: "https://openrouter.ai/api/v1"
+          # PR-Agent/litellm auto-detects the "openrouter/" model prefix
+          # and looks for this exact env var name to authenticate.
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFIG.MODEL: "openrouter/deepseek/deepseek-chat"
-          CONFIG.FALLBACK_MODELS: '["openrouter/meta-llama/llama-3.1-70b-instruct:free"]'
-          PR_REVIEWER.REQUIRE_SCORE_REVIEW: "false"
-          PR_REVIEWER.REQUIRE_TESTS_REVIEW: "true"
-          PR_REVIEWER.REQUIRE_ESTIMATE_EFFORT_TO_REVIEW: "true"
-          PR_DESCRIPTION.PUBLISH_DESCRIPTION_AS_COMMENT: "true"
+
+          # Config keys are lowercase, dot-separated, matching PR-Agent's config sections
+          config.model: "openrouter/deepseek/deepseek-chat"
+          config.fallback_models: '["openrouter/meta-llama/llama-3.1-70b-instruct:free"]'
+
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "true"
+          github_action_config.auto_improve: "true"
+
+          pr_reviewer.require_score_review: "false"
+          pr_reviewer.require_tests_review: "true"
+          pr_reviewer.require_estimate_effort_to_review: "true"
