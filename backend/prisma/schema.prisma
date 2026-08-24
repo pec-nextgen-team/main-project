@@ -302,6 +302,6 @@ model AuditLog {
   newValue    String?
   createdAt   DateTime    @default(now())
 
-  complaint Complaint? @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  complaint Complaint? @relation(fields: [complaintId], references: [id], onDelete: SetNull)
   user      User?      @relation(fields: [userId], references: [id])
 }
