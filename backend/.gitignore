@@ -1,14 +1,12 @@
-.env
+node_modules/
+
+# Environment variables
 .env
 .env.*
 !.env.example
-/src/generated/prisma
-node_modules/
-.env
-.env.*
-# AI Skills & Tooling
-skills-lock.json
+
+# Generated Prisma client
+generated/
+
+# AI tooling
 .claude/
-.agents/
-.windsurf/
-*skills*/
