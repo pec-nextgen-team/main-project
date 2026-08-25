@@ -156,6 +156,10 @@ model Complaint {
   departmentId String?
   equipmentId  String?
 
+  locationBuilding String?
+  floorArea        String?
+  roomAreaNumber   String?
+
   hodApprovalStatus ApprovalStatus @default(PENDING)
   hodApprovedById   String?
   hodApprovedAt     DateTime?
