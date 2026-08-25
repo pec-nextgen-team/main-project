@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/db');
 
-// @desc    Register a new user (Enforces default base role: ELECTRICIAN)
+// @desc    Register a new user (Enforces basic role & cross-field uniqueness)
 // @route   POST /api/auth/register
 exports.register = async (req, res) => {
   try {
@@ -14,12 +14,17 @@ exports.register = async (req, res) => {
       });
     }
 
-    // Check if user already exists
+    // Check cross-field uniqueness:
+    // - employeeId must not collide with any employeeId OR username
+    // - username must not collide with any username OR employeeId
+    // - email must not collide with any existing email
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
-          { employeeId },
-          { username },
+          { employeeId: employeeId },
+          { username: employeeId },
+          { username: username },
+          { employeeId: username },
           ...(email ? [{ email }] : []),
         ],
       },
@@ -27,15 +32,15 @@ exports.register = async (req, res) => {
 
     if (existingUser) {
       return res.status(400).json({
-        message: 'A user with this Employee ID, username, or email already exists.',
+        message: 'A user with this Employee ID, username, or email already exists or conflicts with an existing identifier.',
       });
     }
 
-    // Hash the password
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    // Enforce default base role ELECTRICIAN (ignores any role sent by client)
+    // Create user with default basic role: ELECTRICIAN
     const user = await prisma.user.create({
       data: {
         employeeId,
@@ -98,18 +103,15 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid username/Employee ID or password' });
     }
 
-    // Check if user is active
     if (!user.isActive) {
       return res.status(403).json({ message: 'Account is deactivated. Contact administrator.' });
     }
 
-    // Verify password
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid username/Employee ID or password' });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       {
         userId: user.id,
