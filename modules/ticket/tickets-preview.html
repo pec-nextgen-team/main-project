@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tickets — Accessory Repair Complaint Tracking System</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.4.1/tailwind.min.css"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>
+  body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+  .sidebar-link.active { background: #1e40af; color: #fff; }
+  .sidebar-link:hover:not(.active) { background: #1e293b; }
+  .modal-backdrop { background: rgba(15,23,42,0.55); }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="w-64 shrink-0 bg-[#0b1b3a] text-slate-200 flex flex-col transition-all duration-200">
+    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-sm">PEC</div>
+      <div class="leading-tight">
+        <div class="text-[13px] font-bold text-white tracking-wide">PANIMALAR</div>
+        <div class="text-[10px] text-slate-400 tracking-wide">ENGINEERING COLLEGE</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto">
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-gauge w-4"></i>Dashboard</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-circle-plus w-4"></i>Raise Complaint</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-list-check w-4"></i>My Complaints</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-stamp w-4"></i>Approvals</a>
+      <a class="sidebar-link active flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-ticket w-4"></i>Tickets</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-inbox w-4"></i>Requests</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-user-gear w-4"></i>Technician</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-boxes-stacked w-4"></i>Stock Management</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-chart-column w-4"></i>Reports</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-bell w-4"></i>Notifications</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-gear w-4"></i>Settings</a>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-white/10 text-xs text-slate-400 space-y-1">
+      <div class="font-semibold text-slate-200 mb-1">Need Help?</div>
+      <div><i class="fa-solid fa-phone mr-2"></i>044 - 2649 1113</div>
+      <div><i class="fa-solid fa-envelope mr-2"></i>support@panimalar.ac.in</div>
+      <div class="pt-3 text-[10px] text-slate-500 leading-snug">© 2026 Panimalar Engineering College.<br/>All rights reserved.</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-5 shrink-0">
+      <div class="flex items-center gap-4">
+        <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="text-slate-500 hover:text-slate-800"><i class="fa-solid fa-bars text-lg"></i></button>
+        <span class="font-semibold text-slate-700">Repair &amp; Maintenance Management System</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <div class="relative text-slate-500"><i class="fa-regular fa-bell text-lg"></i><span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">5</span></div>
+        <div class="relative text-slate-500"><i class="fa-regular fa-envelope text-lg"></i><span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">2</span></div>
+        <div class="flex items-center gap-2 cursor-pointer">
+          <div class="h-9 w-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">S</div>
+          <div class="leading-tight hidden sm:block">
+            <div class="text-sm font-semibold text-slate-800">Mr. Selvaraj</div>
+            <div class="text-[11px] text-slate-500">Technician / Service Head</div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-5 space-y-5 overflow-y-auto">
+
+      <!-- PAGE HEADING -->
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Tickets</h1>
+        <div class="text-xs text-slate-500 mt-1"><span class="text-blue-600">Home</span> &gt; <span class="text-slate-700 font-medium">Tickets</span></div>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="summaryCards"></div>
+
+      <!-- CONTENT GRID -->
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-5">
+
+        <!-- LEFT / MAIN COLUMN -->
+        <div class="xl:col-span-3 space-y-5">
+
+          <!-- FILTER PANEL -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="md:col-span-3">
+                <label class="text-xs font-semibold text-slate-500">Search</label>
+                <div class="relative mt-1">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                  <input id="f-search" type="text" placeholder="Search by Ticket ID, Problem, Location..." class="w-full border border-slate-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400" />
+                </div>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Status</label>
+                <select id="f-status" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Status</option>
+                  <option>Complaint Registered</option>
+                  <option>Inspection</option>
+                  <option>Repair Assigned</option>
+                  <option>Action Taken</option>
+                  <option>Verification</option>
+                  <option>Closed</option>
+                  <option>Overdue</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Category</label>
+                <select id="f-category" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Categories</option>
+                  <option>Computer Accessories</option>
+                  <option>Electrical Accessories</option>
+                  <option>Peripheral Devices</option>
+                  <option>Other Accessories</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Priority</label>
+                <select id="f-priority" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Priorities</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">From Date</label>
+                <input id="f-from" type="text" onfocus="(this.type='date')" placeholder="dd-mm-yyyy" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">To Date</label>
+                <input id="f-to" type="text" onfocus="(this.type='date')" placeholder="dd-mm-yyyy" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Location / Building</label>
+                <select id="f-location" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Locations</option>
+                  <option>Main Building</option>
+                  <option>Block A</option>
+                  <option>Block B</option>
+                  <option>Administrative Block</option>
+                  <option>Library</option>
+                  <option>Laboratory Block</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Assigned To</label>
+                <select id="f-assigned" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Technicians</option>
+                  <option>Unassigned</option>
+                  <option>Mr. Karthik</option>
+                  <option>Mr. Rajesh</option>
+                  <option>Mr. Kumar</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-slate-100">
+              <button onclick="resetFilters()" class="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50"><i class="fa-solid fa-rotate-left mr-1.5"></i>Reset</button>
+              <button onclick="exportCSV()" class="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700"><i class="fa-solid fa-file-export mr-1.5"></i>Export</button>
+            </div>
+          </div>
+
+          <!-- TICKETS TABLE -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h2 class="font-semibold text-slate-800">Tickets List</h2>
+              <span id="resultCount" class="text-xs text-slate-500"></span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-[11px] uppercase text-slate-500 bg-slate-50 border-b border-slate-100">
+                    <th class="px-4 py-3">S.No</th>
+                    <th class="px-4 py-3">Ticket ID</th>
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Problem / Location</th>
+                    <th class="px-4 py-3">Priority</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Assigned To</th>
+                    <th class="px-4 py-3">Raised On</th>
+                    <th class="px-4 py-3">SLA (3 Days)</th>
+                    <th class="px-4 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketsBody" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+            <div class="px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 text-sm text-slate-600">
+              <div id="paginationInfo">Showing 1 to 10 of 36 records</div>
+              <div class="flex items-center gap-2">
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angles-left text-xs"></i></button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angle-left text-xs"></i></button>
+                <button class="h-8 w-8 rounded-lg bg-blue-600 text-white font-medium">1</button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50">2</button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50">3</button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angle-right text-xs"></i></button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angles-right text-xs"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="space-y-5">
+
+          <!-- SLA INFO -->
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-5">
+            <h3 class="font-semibold text-slate-800 mb-2"><i class="fa-regular fa-clock text-blue-600 mr-2"></i>SLA Information</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">All approved/active tickets must be resolved within</p>
+            <div class="text-3xl font-bold text-blue-700 my-2">3 Days</div>
+            <p class="text-xs text-slate-600 leading-relaxed">from the applicable approval/processing date.</p>
+            <button class="mt-3 text-xs font-semibold text-blue-700 hover:underline">View SLA Policy <i class="fa-solid fa-arrow-right ml-1"></i></button>
+          </div>
+
+          <!-- STATUS LEGEND -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-3">Status Legend</h3>
+            <ul class="space-y-2.5 text-xs text-slate-600">
+              <li class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>Open / Awaiting Inspection</li>
+              <li class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>In Progress / Under Repair</li>
+              <li class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Verification / Resolved</li>
+              <li class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>Overdue</li>
+              <li class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-slate-500"></span>Closed / Completed</li>
+            </ul>
+          </div>
+
+          <!-- WORKFLOW SUMMARY -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-4">Workflow Summary</h3>
+            <ol class="relative border-l-2 border-slate-200 ml-2 space-y-4">
+              <li class="ml-4"><span class="absolute -left-[9px] h-4 w-4 rounded-full bg-blue-600 border-2 border-white"></span><span class="text-sm text-slate-700 font-medium">1. Complaint Registered</span></li>
+              <li class="ml-4"><span class="absolute -left-[9px] h-4 w-4 rounded-full bg-amber-400 border-2 border-white"></span><span class="text-sm text-slate-700 font-medium">2. Inspection</span></li>
+              <li class="ml-4"><span class="absolute -left-[9px] h-4 w-4 rounded-full bg-indigo-500 border-2 border-white"></span><span class="text-sm text-slate-700 font-medium">3. Repair Assigned</span></li>
+              <li class="ml-4"><span class="absolute -left-[9px] h-4 w-4 rounded-full bg-blue-500 border-2 border-white"></span><span class="text-sm text-slate-700 font-medium">4. Action Taken</span></li>
+              <li class="ml-4"><span class="absolute -left-[9px] h-4 w-4 rounded-full bg-teal-500 border-2 border-white"></span><span class="text-sm text-slate-700 font-medium">5. Verification</span></li>
+              <li class="ml-4"><span class="absolute -left-[9px] h-4 w-4 rounded-full bg-emerald-600 border-2 border-white"></span><span class="text-sm text-slate-700 font-medium">6. Closed</span></li>
+            </ol>
+          </div>
+
+          <!-- QUICK ACTIONS -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-3">Quick Actions</h3>
+            <div class="space-y-2">
+              <button class="w-full text-left text-sm px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-user-plus mr-2 text-blue-600"></i>Assign Repair Personnel</button>
+              <button class="w-full text-left text-sm px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-layer-group mr-2 text-blue-600"></i>Bulk Update Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- TICKET DETAILS MODAL -->
+<div id="modal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white">
+      <h3 class="font-bold text-lg text-slate-800">Ticket Details — <span id="m-id"></span></h3>
+      <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-6 space-y-5 text-sm">
+      <div>
+        <h4 class="text-xs font-bold text-slate-500 uppercase mb-2">Complaint Information</h4>
+        <div class="grid grid-cols-2 gap-3 text-slate-700">
+          <div><span class="text-slate-400">Category:</span> <span id="m-category"></span></div>
+          <div><span class="text-slate-400">Priority:</span> <span id="m-priority"></span></div>
+          <div class="col-span-2"><span class="text-slate-400">Problem / Location:</span> <span id="m-problem"></span></div>
+          <div><span class="text-slate-400">Raised On:</span> <span id="m-raised"></span></div>
+          <div><span class="text-slate-400">SLA:</span> <span id="m-sla"></span></div>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-slate-500 uppercase mb-2">Assignment</h4>
+        <div class="text-slate-700"><span class="text-slate-400">Assigned Technician:</span> <span id="m-assigned"></span></div>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-slate-500 uppercase mb-3">Ticket Timeline</h4>
+        <ol id="m-timeline" class="relative border-l-2 border-slate-200 ml-2 space-y-4"></ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const WORKFLOW = ["Complaint Registered","Inspection","Repair Assigned","Action Taken","Verification","Closed"];
+
+const STATUS_STYLE = {
+  "Complaint Registered": "bg-blue-100 text-blue-700",
+  "Inspection": "bg-amber-100 text-amber-700",
+  "Repair Assigned": "bg-indigo-100 text-indigo-700",
+  "Action Taken": "bg-sky-100 text-sky-700",
+  "Verification": "bg-teal-100 text-teal-700",
+  "Closed": "bg-emerald-100 text-emerald-700",
+  "Overdue": "bg-red-100 text-red-700"
+};
+const PRIORITY_STYLE = {
+  High: "bg-red-100 text-red-700",
+  Medium: "bg-amber-100 text-amber-700",
+  Low: "bg-emerald-100 text-emerald-700"
+};
+const SLA_STYLE = {
+  green: "text-emerald-600", blue: "text-blue-600", orange: "text-amber-600", red: "text-red-600"
+};
+
+const tickets = [
+ {id:"ACC-2026-0150", category:"Computer Accessories", problem:"Keyboard Not Working", location:"IT Lab - IT-01", priority:"High", status:"Action Taken", assigned:"Mr. Karthik", raised:"16-05-2026 10:30 AM", sla:"1 Day Left", slaColor:"orange"},
+ {id:"ACC-2026-0147", category:"Peripheral Devices", problem:"Printer Not Working", location:"Block A - 2nd Floor", priority:"Medium", status:"Inspection", assigned:"-", raised:"14-05-2026 09:10 AM", sla:"3 Days Left", slaColor:"green"},
+ {id:"ACC-2026-0146", category:"Computer Accessories", problem:"Monitor Display Issue", location:"Library", priority:"Medium", status:"Repair Assigned", assigned:"Mr. Rajesh", raised:"13-05-2026 03:45 PM", sla:"2 Days Left", slaColor:"blue"},
+ {id:"ACC-2026-0145", category:"Electrical Accessories", problem:"UPS Not Working", location:"Hostel - Block B", priority:"Low", status:"Repair Assigned", assigned:"Mr. Kumar", raised:"12-05-2026 11:20 AM", sla:"2 Days Left", slaColor:"blue"},
+ {id:"ACC-2026-0142", category:"Computer Accessories", problem:"Mouse Not Working", location:"CSE Seminar Hall", priority:"Medium", status:"Verification", assigned:"Mr. Rajesh", raised:"10-05-2026 01:15 PM", sla:"Resolved", slaColor:"green"},
+ {id:"ACC-2026-0140", category:"Other Accessories", problem:"Projector Remote Not Working", location:"Admin Block", priority:"Low", status:"Inspection", assigned:"-", raised:"09-05-2026 04:00 PM", sla:"3 Days Left", slaColor:"green"},
+ {id:"ACC-2026-0139", category:"Electrical Accessories", problem:"Adapter Failure", location:"EEE Lab", priority:"High", status:"Action Taken", assigned:"Mr. Karthik", raised:"08-05-2026 10:05 AM", sla:"1 Day Left", slaColor:"orange"},
+ {id:"ACC-2026-0138", category:"Peripheral Devices", problem:"Printer Paper Feed Issue", location:"Boys' Hostel", priority:"Low", status:"Overdue", assigned:"Mr. Kumar", raised:"05-05-2026 08:30 AM", sla:"Overdue by 1 Day", slaColor:"red"},
+ {id:"ACC-2026-0135", category:"Computer Accessories", problem:"Projector Not Working", location:"Auditorium", priority:"Medium", status:"Closed", assigned:"Mr. Rajesh", raised:"01-05-2026 09:50 AM", sla:"Resolved on 03-05-2026", slaColor:"green"},
+ {id:"ACC-2026-0132", category:"Electrical Accessories", problem:"Power Adapter Issue", location:"OHT - Terrace", priority:"Low", status:"Action Taken", assigned:"Mr. Kumar", raised:"28-04-2026 02:40 PM", sla:"2 Days Left", slaColor:"blue"},
+];
+
+const summary = [
+  {label:"Total Tickets", value:36, sub:"All time", icon:"fa-ticket", color:"text-blue-600 bg-blue-50"},
+  {label:"Open", value:8, sub:"Yet to be inspected / assigned", icon:"fa-folder-open", color:"text-amber-600 bg-amber-50"},
+  {label:"In Progress", value:14, sub:"Under repair", icon:"fa-screwdriver-wrench", color:"text-indigo-600 bg-indigo-50"},
+  {label:"Resolved", value:10, sub:"Awaiting verification", icon:"fa-circle-check", color:"text-emerald-600 bg-emerald-50"},
+  {label:"Overdue", value:4, sub:"Exceeded 3 days", icon:"fa-triangle-exclamation", color:"text-red-600 bg-red-50"},
+];
+
+function renderSummary(){
+  document.getElementById('summaryCards').innerHTML = summary.map(c => `
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div class="h-9 w-9 rounded-lg ${c.color} flex items-center justify-center mb-2"><i class="fa-solid ${c.icon}"></i></div>
+      <div class="text-2xl font-bold text-slate-800">${c.value}</div>
+      <div class="text-sm font-medium text-slate-600">${c.label}</div>
+      <div class="text-[11px] text-slate-400 mt-0.5">${c.sub}</div>
+    </div>`).join('');
+}
+
+function badge(text, cls){
+  return `<span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold ${cls}">${text}</span>`;
+}
+
+function renderTable(list){
+  const body = document.getElementById('ticketsBody');
+  document.getElementById('resultCount').textContent = `${list.length} matching tickets`;
+  if(list.length === 0){
+    body.innerHTML = `<tr><td colspan="10" class="text-center text-slate-400 py-10">No tickets match the current filters.</td></tr>`;
+    return;
+  }
+  body.innerHTML = list.map((t,i) => `
+    <tr class="hover:bg-slate-50">
+      <td class="px-4 py-3 text-slate-500">${i+1}</td>
+      <td class="px-4 py-3 font-semibold text-blue-700">${t.id}</td>
+      <td class="px-4 py-3 text-slate-600">${t.category}</td>
+      <td class="px-4 py-3">
+        <div class="font-medium text-slate-800">${t.problem}</div>
+        <div class="text-xs text-slate-400">${t.location}</div>
+      </td>
+      <td class="px-4 py-3">${badge(t.priority, PRIORITY_STYLE[t.priority])}</td>
+      <td class="px-4 py-3">${badge(t.status, STATUS_STYLE[t.status])}</td>
+      <td class="px-4 py-3 text-slate-600">${t.assigned}</td>
+      <td class="px-4 py-3 text-xs text-slate-500">${t.raised}</td>
+      <td class="px-4 py-3">
+        <div class="text-xs font-medium ${SLA_STYLE[t.slaColor]}">${t.sla}</div>
+      </td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <button onclick="openModal('${t.id}')" class="h-8 w-8 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-500"><i class="fa-regular fa-eye"></i></button>
+          <button class="h-8 w-8 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-500"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function applyFilters(){
+  const search = document.getElementById('f-search').value.toLowerCase();
+  const status = document.getElementById('f-status').value;
+  const category = document.getElementById('f-category').value;
+  const priority = document.getElementById('f-priority').value;
+  const location = document.getElementById('f-location').value;
+  const assigned = document.getElementById('f-assigned').value;
+
+  const filtered = tickets.filter(t => {
+    if(search && !(t.id.toLowerCase().includes(search) || t.problem.toLowerCase().includes(search) || t.location.toLowerCase().includes(search))) return false;
+    if(status !== "All Status" && t.status !== status) return false;
+    if(category !== "All Categories" && t.category !== category) return false;
+    if(priority !== "All Priorities" && t.priority !== priority) return false;
+    if(location !== "All Locations" && !t.location.includes(location.replace("Block","Block "))) { /* loose match */ }
+    if(assigned !== "All Technicians"){
+      if(assigned === "Unassigned" && t.assigned !== "-") return false;
+      if(assigned !== "Unassigned" && t.assigned !== assigned) return false;
+    }
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function resetFilters(){
+  document.getElementById('f-search').value = "";
+  document.getElementById('f-status').value = "All Status";
+  document.getElementById('f-category').value = "All Categories";
+  document.getElementById('f-priority').value = "All Priorities";
+  document.getElementById('f-from').value = "";
+  document.getElementById('f-to').value = "";
+  document.getElementById('f-location').value = "All Locations";
+  document.getElementById('f-assigned').value = "All Technicians";
+  renderTable(tickets);
+}
+
+function exportCSV(){
+  const rows = [["Ticket ID","Category","Problem","Location","Priority","Status","Assigned To","Raised On","SLA"]];
+  tickets.forEach(t => rows.push([t.id,t.category,t.problem,t.location,t.priority,t.status,t.assigned,t.raised,t.sla]));
+  const csv = rows.map(r => r.map(v => `"${v}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "tickets_export.csv";
+  a.click();
+}
+
+function openModal(id){
+  const t = tickets.find(x => x.id === id);
+  document.getElementById('m-id').textContent = t.id;
+  document.getElementById('m-category').textContent = t.category;
+  document.getElementById('m-priority').innerHTML = badge(t.priority, PRIORITY_STYLE[t.priority]);
+  document.getElementById('m-problem').textContent = `${t.problem} / ${t.location}`;
+  document.getElementById('m-raised').textContent = t.raised;
+  document.getElementById('m-sla').innerHTML = `<span class="${SLA_STYLE[t.slaColor]} font-semibold">${t.sla}</span>`;
+  document.getElementById('m-assigned').textContent = t.assigned;
+
+  const currentIdx = WORKFLOW.indexOf(t.status === "Overdue" ? "Action Taken" : t.status);
+  document.getElementById('m-timeline').innerHTML = WORKFLOW.map((stage, i) => {
+    const done = i <= currentIdx;
+    const isCurrent = i === currentIdx;
+    return `<li class="ml-4">
+      <span class="absolute -left-[9px] h-4 w-4 rounded-full border-2 border-white ${done ? 'bg-blue-600' : 'bg-slate-300'}"></span>
+      <span class="text-sm ${isCurrent ? 'font-bold text-blue-700' : 'text-slate-600'}">${stage}</span>
+      ${isCurrent ? '<div class="text-[11px] text-slate-400">Current stage</div>' : ''}
+    </li>`;
+  }).join('');
+
+  document.getElementById('modal').classList.remove('hidden');
+  document.getElementById('modal').classList.add('flex');
+}
+function closeModal(){
+  document.getElementById('modal').classList.add('hidden');
+  document.getElementById('modal').classList.remove('flex');
+}
+
+["f-search","f-status","f-category","f-priority","f-location","f-assigned"].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyFilters);
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+renderSummary();
+renderTable(tickets);
+</script>
+</body>
+</html>
