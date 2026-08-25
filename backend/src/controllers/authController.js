@@ -2,26 +2,32 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/db');
 
-// @desc    Register a new user (Staff / Admin / Electrician)
+// @desc    Register a new user (Enforces default base role: ELECTRICIAN)
 // @route   POST /api/auth/register
 exports.register = async (req, res) => {
   try {
-    const { employeeId, username, password, fullName, email, phone, role, departmentId } = req.body;
+    const { employeeId, username, password, fullName, email, phone, departmentId } = req.body;
 
-    // Check if user already exists by employeeId, username, or email
+    if (!employeeId || !username || !password || !fullName) {
+      return res.status(400).json({
+        message: 'Employee ID, username, fullName, and password are required.',
+      });
+    }
+
+    // Check if user already exists
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
           { employeeId },
           { username },
-          ...(email ? [{ email }] : [])
-        ]
-      }
+          ...(email ? [{ email }] : []),
+        ],
+      },
     });
 
     if (existingUser) {
-      return res.status(400).json({ 
-        message: 'A user with this Employee ID, username, or email already exists.' 
+      return res.status(400).json({
+        message: 'A user with this Employee ID, username, or email already exists.',
       });
     }
 
@@ -29,7 +35,7 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    // Create user in Neon PostgreSQL
+    // Enforce default base role ELECTRICIAN (ignores any role sent by client)
     const user = await prisma.user.create({
       data: {
         employeeId,
@@ -38,7 +44,7 @@ exports.register = async (req, res) => {
         fullName,
         email: email || null,
         phone: phone || null,
-        role,
+        role: 'ELECTRICIAN',
         departmentId: departmentId || null,
       },
       select: {
@@ -50,13 +56,13 @@ exports.register = async (req, res) => {
         role: true,
         departmentId: true,
         isActive: true,
-        createdAt: true
-      }
+        createdAt: true,
+      },
     });
 
     res.status(201).json({
-      message: 'User registered successfully',
-      user
+      message: 'User registered successfully with default role (ELECTRICIAN).',
+      user,
     });
   } catch (error) {
     console.error('Register Error:', error);
@@ -70,17 +76,22 @@ exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Find user by username or employeeId
+    if (!username || !password) {
+      return res.status(400).json({
+        message: 'Please provide your username/Employee ID and password.',
+      });
+    }
+
     const user = await prisma.user.findFirst({
       where: {
         OR: [
           { username: username },
-          { employeeId: username }
-        ]
+          { employeeId: username },
+        ],
       },
       include: {
-        department: true
-      }
+        department: true,
+      },
     });
 
     if (!user) {
@@ -100,11 +111,11 @@ exports.login = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        userId: user.id, 
-        role: user.role, 
+      {
+        userId: user.id,
+        role: user.role,
         employeeId: user.employeeId,
-        departmentId: user.departmentId 
+        departmentId: user.departmentId,
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
@@ -120,14 +131,15 @@ exports.login = async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
-        department: user.department
-      }
+        department: user.department,
+      },
     });
   } catch (error) {
     console.error('Login Error:', error);
     res.status(500).json({ message: 'Login failed', error: error.message });
   }
 };
+
 // @desc    Get currently logged-in user profile
 // @route   GET /api/auth/me
 // @access  Private
