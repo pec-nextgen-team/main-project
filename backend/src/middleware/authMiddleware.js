@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/db');
 
+// 1. Authenticate Token & Validate Active User Status
 const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -68,22 +69,15 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-const authorize = (...allowedRoles) => {
+// 2. Role-Based Access Control (RBAC)
+const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Authentication required',
-      });
-    }
-
-    if (!allowedRoles.includes(req.user.role)) {
+    if (!req.user || !req.user.role || !allowedRoles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: 'Insufficient permissions',
+        message: `Forbidden: Access restricted to roles: ${allowedRoles.join(', ')}`,
       });
     }
-
     next();
   };
 };
