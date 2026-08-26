@@ -3,7 +3,8 @@ const prisma = require('../config/db');
 const updateComplaintStatus = async (req, res) => {
   try {
     const { complaintId } = req.params;
-    const { status, remarks, changedById } = req.body;
+    const { status, remarks } = req.body;
+    const changedById = req.user.id;
 
     if (!status) {
       return res.status(400).json({
@@ -62,7 +63,7 @@ const updateComplaintStatus = async (req, res) => {
           complaintId,
           status,
           remarks: remarks || null,
-          changedById: changedById || null,
+          changedById,
         },
       });
 

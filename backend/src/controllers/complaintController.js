@@ -7,17 +7,17 @@ const createComplaint = async (req, res) => {
       description,
       category,
       priority,
-      reporterId,
       departmentId,
       equipmentId,
       slaDueAt,
     } = req.body;
+    const reporterId = req.user.id;
 
-    if (!title || !description || !category || !reporterId || !slaDueAt) {
+    if (!title || !description || !category || !slaDueAt) {
       return res.status(400).json({
         status: 'error',
         message:
-          'title, description, category, reporterId and slaDueAt are required',
+           'title, description, category and slaDueAt are required',
       });
     }
 
