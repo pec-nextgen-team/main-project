@@ -48,16 +48,21 @@ export async function openTicket(req, res) {
       message: "Ticket opened successfully",
       ticket
     });
-
   } catch (error) {
     console.error("Open ticket error:", error);
+
+    // Handle concurrent ticket creation
+    if (error.code === "P2002") {
+      return res.status(409).json({
+        message: "Ticket already exists for this complaint"
+      });
+    }
 
     return res.status(500).json({
       message: "Failed to open ticket"
     });
   }
 }
-
 
 export async function getElectricians(req, res) {
   try {
@@ -76,7 +81,6 @@ export async function getElectricians(req, res) {
     });
 
     return res.status(200).json(electricians);
-
   } catch (error) {
     console.error("Get electricians error:", error);
 
@@ -85,7 +89,6 @@ export async function getElectricians(req, res) {
     });
   }
 }
-
 
 export async function assignElectrician(req, res) {
   try {
@@ -145,15 +148,29 @@ export async function assignElectrician(req, res) {
     const slaTarget = new Date(assignedAt);
     slaTarget.setDate(slaTarget.getDate() + 3);
 
-    const updatedTicket = await prisma.ticket.update({
+    // Atomically assign the electrician only if the ticket is still open
+    const assignment = await prisma.ticket.updateMany({
       where: {
-        id: ticketId
+        id: ticketId,
+        status: "TICKET_OPEN"
       },
       data: {
         assignedElectricianId: electrician.id,
         assignedAt: assignedAt,
         slaTarget: slaTarget,
         status: "ASSIGNED"
+      }
+    });
+
+    if (assignment.count === 0) {
+      return res.status(409).json({
+        message: "Ticket is no longer open or has already been assigned"
+      });
+    }
+
+    const updatedTicket = await prisma.ticket.findUnique({
+      where: {
+        id: ticketId
       },
       include: {
         assignedElectrician: {
@@ -171,7 +188,6 @@ export async function assignElectrician(req, res) {
       message: "Electrician assigned successfully",
       ticket: updatedTicket
     });
-
   } catch (error) {
     console.error("Assign electrician error:", error);
 
