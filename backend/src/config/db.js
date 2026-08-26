@@ -7,13 +7,8 @@ console.log('--- Database Check ---');
 console.log('DATABASE_URL detected:', Boolean(process.env.DATABASE_URL));
 
 // Configure PostgreSQL pool
-const connectionUrl = new URL(process.env.DATABASE_URL);
-
-connectionUrl.searchParams.delete('sslmode');
-connectionUrl.searchParams.delete('channel_binding');
-
 const pool = new Pool({
-  connectionString: connectionUrl.toString(),
+  connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
   },
