@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider   = "prisma-client-js"
+  output     = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPERVISOR
+  HOD
+  ELECTRICIAN_HEAD
+  ELECTRICIAN
+}
+
+enum ComplaintStatus {
+  DRAFT
+  PENDING_HOD_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+enum TicketStatus {
+  TICKET_OPEN
+  ASSIGNED
+}
+
+enum ComplaintCategory {
+  ELECTRICAL
+  PLUMBING
+  MAINTENANCE
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model User {
+  id                Int         @id @default(autoincrement())
+  identifier        String      @unique
+  passwordHash      String
+  role              Role
+  complaints        Complaint[] @relation("ComplaintCreator")
+  assignedTickets   Ticket[]    @relation("AssignedElectrician")
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model Complaint {
+  id          Int              @id @default(autoincrement())
+  title       String
+  description String
+  category    ComplaintCategory
+  location    String
+  priority    Priority
+  status      ComplaintStatus  @default(PENDING_HOD_APPROVAL)
+
+  creatorId   Int
+  creator     User             @relation("ComplaintCreator", fields: [creatorId], references: [id])
+
+  ticket      Ticket?
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([status])
+  @@index([creatorId])
+}
+
+model Ticket {
+  id                    Int          @id @default(autoincrement())
+  complaintId           Int          @unique
+  complaint             Complaint    @relation(fields: [complaintId], references: [id])
+
+  status                TicketStatus @default(TICKET_OPEN)
+
+  assignedElectricianId Int?
+  assignedElectrician   User?        @relation("AssignedElectrician", fields: [assignedElectricianId], references: [id])
+
+  assignedAt            DateTime?
+  slaTarget             DateTime?
+
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  @@index([status])
+  @@index([assignedElectricianId])
+}
