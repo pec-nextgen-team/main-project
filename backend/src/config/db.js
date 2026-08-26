@@ -7,8 +7,13 @@ console.log('--- Database Check ---');
 console.log('DATABASE_URL detected:', Boolean(process.env.DATABASE_URL));
 
 // Configure PostgreSQL pool
+const connectionUrl = new URL(process.env.DATABASE_URL);
+
+connectionUrl.searchParams.delete('sslmode');
+connectionUrl.searchParams.delete('channel_binding');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: connectionUrl.toString(),
   ssl: {
     rejectUnauthorized: false,
   },
@@ -17,9 +22,9 @@ const pool = new Pool({
 // Test raw connection to Neon
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('❌ Connection Failed:', err.message);
+    console.error('Connection Failed:', err.message);
   } else {
-    console.log('✅ Connected to Neon PostgreSQL successfully!');
+    console.log('Connected to Neon PostgreSQL successfully!');
     release();
   }
 });
