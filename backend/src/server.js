@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const healthRoutes = require('./routes/healthRoutes');
 const authRoutes = require('./routes/authRoutes');
+const approvalRoutes = require('./routes/approvalRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(express.json());
 // 1. Mount All API Routes First
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/approvals', approvalRoutes);
 
 // // Optional test endpoint
 // app.get('/api/auth/me-test', (req, res) => {
