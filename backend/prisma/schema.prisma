@@ -1,0 +1,307 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  SUPERVISOR
+  ELECTRICIAN_INCHARGE
+  HOD
+  ELECTRICIAN_HEAD
+  ELECTRICIAN
+  MANAGER
+  DEAN_IQAC
+}
+
+enum ComplaintCategory {
+  ELECTRICAL
+  PLUMBING
+  GENERAL_MAINTENANCE
+}
+
+enum ComplaintPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ComplaintStatus {
+  COMPLAINT_REGISTERED
+  INSPECTION
+  REPAIR_ASSIGNED
+  ACTION_TAKEN
+  VERIFICATION
+  CLOSED
+  OVERDUE
+  ESCALATED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AssignmentStatus {
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  REASSIGNED
+}
+
+enum NotificationChannel {
+  EMAIL
+  DASHBOARD
+  SMS
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  READ
+}
+
+enum EscalationReason {
+  SLA_BREACH
+  NO_UPDATE_24_HOURS
+  HOD_MARKED_NOT_RESOLVED
+}
+
+enum AuditAction {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+  APPROVED
+  REJECTED
+  ASSIGNED
+  REASSIGNED
+  ESCALATED
+  VERIFIED
+  CLOSED
+  ATTACHMENT_ADDED
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  code      String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users      User[]
+  complaints Complaint[]
+  equipment  Equipment[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  employeeId   String   @unique
+  username     String   @unique
+  passwordHash String
+  fullName     String
+  email        String?  @unique
+  phone        String?
+  role         UserRole
+  isActive     Boolean  @default(true)
+  departmentId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  department Department? @relation(fields: [departmentId], references: [id])
+
+  complaintsReported Complaint[]              @relation("ComplaintReporter")
+  complaintsApproved Complaint[]              @relation("ComplaintApprover")
+  assignments        Assignment[]
+  statusChanges      ComplaintStatusHistory[] @relation("StatusHistoryChangedBy")
+  assignmentsMade    Assignment[]             @relation("AssignmentAssignedBy")
+  inspections        Inspection[]             @relation("Inspector")
+  atrs               ActionTakenReport[]      @relation("ATRSubmittedBy")
+  verifications      Verification[]           @relation("Verifier")
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+  escalationsRaised  Escalation[]             @relation("EscalationRaisedBy")
+}
+
+model Equipment {
+  id            String   @id @default(uuid())
+  name          String
+  equipmentCode String?  @unique
+  description   String?
+  location      String?
+  departmentId  String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  department Department? @relation(fields: [departmentId], references: [id])
+  complaints Complaint[]
+}
+
+model Complaint {
+  id           String            @id @default(uuid())
+  ticketNumber String            @unique
+  title        String
+  description  String
+  category     ComplaintCategory
+  priority     ComplaintPriority @default(MEDIUM)
+  status       ComplaintStatus   @default(COMPLAINT_REGISTERED)
+
+  reporterId   String
+  departmentId String?
+  equipmentId  String?
+
+  hodApprovalStatus ApprovalStatus @default(PENDING)
+  hodApprovedById   String?
+  hodApprovedAt     DateTime?
+  hodRemarks        String?
+
+  registeredAt  DateTime  @default(now())
+  slaDueAt      DateTime
+  lastUpdatedAt DateTime  @default(now())
+  resolvedAt    DateTime?
+  verifiedAt    DateTime?
+  closedAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reporter      User        @relation("ComplaintReporter", fields: [reporterId], references: [id])
+  department    Department? @relation(fields: [departmentId], references: [id])
+  equipment     Equipment?  @relation(fields: [equipmentId], references: [id])
+  hodApprovedBy User?       @relation("ComplaintApprover", fields: [hodApprovedById], references: [id])
+
+  attachments   Attachment[]
+  inspections   Inspection[]
+  assignments   Assignment[]
+  atrs          ActionTakenReport[]
+  statusHistory ComplaintStatusHistory[]
+  escalations   Escalation[]
+  notifications Notification[]
+  verifications Verification[]
+  auditLogs     AuditLog[]
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  complaintId String
+  fileName    String
+  fileUrl     String
+  fileType    String?
+  fileSize    Int?
+  uploadedAt  DateTime @default(now())
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+}
+
+model Inspection {
+  id             String   @id @default(uuid())
+  complaintId    String
+  inspectorId    String
+  findings       String
+  recommendation String?
+  inspectedAt    DateTime @default(now())
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  inspector User      @relation("Inspector", fields: [inspectorId], references: [id])
+}
+
+model Assignment {
+  id           String           @id @default(uuid())
+  complaintId  String
+  technicianId String
+  assignedById String?
+  status       AssignmentStatus @default(ASSIGNED)
+  assignedAt   DateTime         @default(now())
+  startedAt    DateTime?
+  completedAt  DateTime?
+  remarks      String?
+
+  complaint  Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  technician User      @relation(fields: [technicianId], references: [id])
+  assignedBy User?     @relation("AssignmentAssignedBy", fields: [assignedById], references: [id])
+}
+
+model ActionTakenReport {
+  id            String   @id @default(uuid())
+  complaintId   String
+  submittedById String
+  actionTaken   String
+  partsUsed     String?
+  remarks       String?
+  submittedAt   DateTime @default(now())
+
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  submittedBy User      @relation("ATRSubmittedBy", fields: [submittedById], references: [id])
+}
+
+model Verification {
+  id          String   @id @default(uuid())
+  complaintId String
+  verifierId  String
+  isVerified  Boolean
+  remarks     String?
+  verifiedAt  DateTime @default(now())
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  verifier  User      @relation("Verifier", fields: [verifierId], references: [id])
+}
+
+model ComplaintStatusHistory {
+  id          String          @id @default(uuid())
+  complaintId String
+  status      ComplaintStatus
+  remarks     String?
+  changedById String?
+  changedAt   DateTime        @default(now())
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  changedBy User?     @relation("StatusHistoryChangedBy", fields: [changedById], references: [id])
+}
+
+model Escalation {
+  id          String           @id @default(uuid())
+  complaintId String
+  reason      EscalationReason
+  description String?
+  raisedById  String?
+  raisedAt    DateTime         @default(now())
+  resolvedAt  DateTime?
+  isResolved  Boolean          @default(false)
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  raisedBy  User?     @relation("EscalationRaisedBy", fields: [raisedById], references: [id])
+}
+
+model Notification {
+  id          String              @id @default(uuid())
+  complaintId String?
+  userId      String
+  channel     NotificationChannel
+  message     String
+  status      NotificationStatus  @default(PENDING)
+  sentAt      DateTime?
+  readAt      DateTime?
+  createdAt   DateTime            @default(now())
+
+  complaint Complaint? @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id          String      @id @default(uuid())
+  complaintId String?
+  userId      String?
+  action      AuditAction
+  description String?
+  oldValue    String?
+  newValue    String?
+  createdAt   DateTime    @default(now())
+
+  complaint Complaint? @relation(fields: [complaintId], references: [id], onDelete: SetNull)
+  user      User?      @relation(fields: [userId], references: [id])
+}
