@@ -17,9 +17,9 @@ const pool = new Pool({
 // Test raw connection to Neon
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('❌ Connection Failed:', err.message);
+    console.error('Connection Failed:', err.message);
   } else {
-    console.log('✅ Connected to Neon PostgreSQL successfully!');
+    console.log('Connected to Neon PostgreSQL successfully!');
     release();
   }
 });
