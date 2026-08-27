@@ -18,7 +18,7 @@ const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
+      where: { id: decoded.userId },
       select: {
         id: true,
         employeeId: true,
@@ -84,6 +84,6 @@ const authorizeRoles = (...allowedRoles) => {
 
 module.exports = {
   authenticate,
-  authorizeRoles,
-  authorize: authorizeRoles,
+  authorize,
+  authorizeRoles: authorize,
 };

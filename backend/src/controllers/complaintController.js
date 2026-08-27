@@ -16,8 +16,7 @@ const createComplaint = async (req, res) => {
     if (!title || !description || !category || !slaDueAt) {
       return res.status(400).json({
         status: 'error',
-        message:
-           'title, description, category and slaDueAt are required',
+        message: 'title, description, category and slaDueAt are required',
       });
     }
 

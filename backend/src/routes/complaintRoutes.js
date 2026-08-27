@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   '/',
   authenticate,
-  authorizeRoles('ADMIN', 'EMPLOYEE'),
+  authorizeRoles('SUPERVISOR'),
   createComplaint
 );
 
