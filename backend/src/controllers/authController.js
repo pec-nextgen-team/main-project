@@ -50,7 +50,7 @@ exports.register = async (req, res) => {
         email: email || null,
         phone: phone || null,
         role: 'ELECTRICIAN',
-        departmentId: departmentId || null,
+        departmentId: departmentId ? String(departmentId) : null,
       },
       select: {
         id: true,
@@ -71,6 +71,21 @@ exports.register = async (req, res) => {
     });
   } catch (error) {
     console.error('Register Error:', error);
+
+    // P2003: Foreign key constraint violation (invalid/nonexistent departmentId)
+    if (error.code === 'P2003') {
+      return res.status(400).json({
+        message: 'Invalid departmentId: The specified department does not exist.',
+      });
+    }
+
+    // P2002: Unique constraint violation fallback
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        message: `A user with this ${error.meta?.target?.[0] || 'field'} already exists.`,
+      });
+    }
+
     res.status(500).json({ message: 'Registration failed', error: error.message });
   }
 };
