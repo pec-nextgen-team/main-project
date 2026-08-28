@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EmploymentType {
+  Permanent
+  Contract
+  PartTime
+  Outsourced
+}
+
+enum ElectricianStatus {
+  Active
+  Inactive
+  OnLeave
+}
+
+model Electrician {
+  id                    String            @id @default(cuid())
+  employeeId            String            @unique
+  fullName              String
+  dateOfBirth           DateTime
+  gender                String
+  phoneNumber           String
+  email                 String?
+  aadhaarNumber         String?
+  panNumber             String?
+  address               String
+  city                  String
+  state                 String
+  pinCode               String
+
+  department            String
+  employmentType        String
+  dateOfJoining         DateTime
+  reportingTo           String
+  workLocation          String
+  shift                 String?
+  status                String            @default("Active")
+
+  specialization        String[]
+  skills                String
+
+  emergencyContactName  String
+  emergencyRelationship String
+  emergencyPhone        String
+  alternatePhone        String?
+
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  @@map("electricians")
+}

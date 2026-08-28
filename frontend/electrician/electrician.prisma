@@ -1,0 +1,25 @@
+// Add this model to your existing schema.prisma.
+// Referenced by Leave.employeeId -> Electrician.id (see leave.prisma).
+//
+// After adding, run:
+//   npx prisma migrate dev --name add_electrician_list
+
+model Electrician {
+  id             String   @id // e.g. "ELEC001" (human-readable employee ID, used as PK)
+  name           String
+  department     String // "Electrical Maintenance" | "Plumbing Maintenance" | "General Maintenance"
+  skills         String // comma-separated specialization tags, e.g. "Wiring, Lighting"
+  phone          String
+  status         String   @default("Active") // "Active" | "On Leave" | "Inactive"
+  availability   String   @default("Available") // "Available" | "On Duty" | "Not Available"
+  employmentType String   @default("Full-time") // "Full-time" | "Contract"
+  location       String? // building / block assignment
+  joinedOn       DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  leaves Leave[]
+
+  @@index([department])
+  @@index([status])
+}

@@ -1,0 +1,43 @@
+// Add this model to your existing schema.prisma (and merge the enums if
+// LeaveType / LeaveStatus / Department already exist there).
+//
+// After adding, run:
+//   npx prisma migrate dev --name add_leave_management
+
+enum LeaveType {
+  CASUAL
+  EARNED
+  SICK
+  OTHER
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Leave {
+  id           Int         @id @default(autoincrement())
+  employeeId   String // e.g. "ELEC001" — FK to Electrician.employeeId
+  electrician  Electrician @relation(fields: [employeeId], references: [employeeId])
+  leaveType    LeaveType
+  fromDate     DateTime    @db.Date
+  toDate       DateTime    @db.Date
+  days         Int
+  reason       String?
+  status       LeaveStatus @default(PENDING)
+  appliedAt    DateTime    @default(now())
+  decidedAt    DateTime?
+  decidedBy    String? // head/admin user id who approved/rejected
+  remarks      String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([employeeId])
+  @@index([status])
+  @@index([fromDate, toDate])
+}
+
+// Expected relation on the existing Electrician model:
+//   leaves Leave[]

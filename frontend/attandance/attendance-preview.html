@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Attendance — Repair &amp; Maintenance Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>
+  body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+  .sidebar-link.active { background: #1e40af; color: #fff; }
+  .sidebar-link:hover:not(.active) { background: #1e293b; }
+  .modal-backdrop { background: rgba(15,23,42,0.55); }
+  .donut { transform: rotate(-90deg); }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="w-64 shrink-0 bg-[#0b1b3a] text-slate-200 flex flex-col transition-all duration-200">
+    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-sm">PEC</div>
+      <div class="leading-tight">
+        <div class="text-[13px] font-bold text-white tracking-wide">PANIMALAR</div>
+        <div class="text-[10px] text-slate-400 tracking-wide">ENGINEERING COLLEGE</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto">
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-gauge w-4"></i>Dashboard</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-circle-plus w-4"></i>Raise Complaint</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-list-check w-4"></i>My Complaints</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-stamp w-4"></i>Approvals</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-ticket w-4"></i>Tickets</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-inbox w-4"></i>Requests</a>
+
+      <div class="pt-2">
+        <button onclick="document.getElementById('elecSub').classList.toggle('hidden')" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-bolt w-4"></i>Electrician</span>
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </button>
+        <div id="elecSub" class="ml-6 mt-1 space-y-1 border-l border-white/10 pl-3">
+          <a class="sidebar-link flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs" href="#">Electrician List</a>
+          <a class="sidebar-link flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs" href="#">Add Electrician</a>
+          <a class="sidebar-link flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs" href="#">Skills / Certification</a>
+          <a class="sidebar-link active flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs" href="#">Attendance</a>
+          <a class="sidebar-link flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs" href="#">Leave</a>
+          <a class="sidebar-link flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs" href="#">Performance</a>
+        </div>
+      </div>
+
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mt-2" href="#"><i class="fa-solid fa-boxes-stacked w-4"></i>Stock Management</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-chart-column w-4"></i>Reports</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-bell w-4"></i>Notifications</a>
+      <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg" href="#"><i class="fa-solid fa-gear w-4"></i>Settings</a>
+    </nav>
+
+    <div class="px-4 py-3 border-t border-white/10 text-[10px] text-slate-500 leading-snug">
+      © 2026 Panimalar Engineering College.<br/>All rights reserved.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-5 shrink-0">
+      <div class="flex items-center gap-4">
+        <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="text-slate-500 hover:text-slate-800"><i class="fa-solid fa-bars text-lg"></i></button>
+        <span class="font-semibold text-slate-700">Repair &amp; Maintenance Management System</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <div class="relative text-slate-500"><i class="fa-regular fa-bell text-lg"></i><span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">6</span></div>
+        <div class="relative text-slate-500"><i class="fa-regular fa-envelope text-lg"></i><span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">3</span></div>
+        <div class="flex items-center gap-2 cursor-pointer">
+          <div class="h-9 w-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">S</div>
+          <div class="leading-tight hidden sm:block">
+            <div class="text-sm font-semibold text-slate-800">Mr. Selvaraj</div>
+            <div class="text-[11px] text-slate-500">Electrician Head</div>
+          </div>
+          <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-5 space-y-5 overflow-y-auto">
+
+      <!-- PAGE HEADING -->
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Attendance</h1>
+        <div class="text-xs text-slate-500 mt-1"><span class="text-blue-600">Home</span> &gt; <span class="text-slate-500">Electrician</span> &gt; <span class="text-slate-700 font-medium">Attendance</span></div>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="summaryCards"></div>
+
+      <!-- CONTENT GRID -->
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-5">
+
+        <!-- LEFT / MAIN COLUMN -->
+        <div class="xl:col-span-3 space-y-5">
+
+          <!-- FILTER PANEL -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Date</label>
+                <div class="relative mt-1">
+                  <i class="fa-regular fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                  <input id="f-date" type="date" value="2026-05-16" class="w-full border border-slate-300 rounded-lg pl-9 pr-3 py-2 text-sm" />
+                </div>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Department</label>
+                <select id="f-dept" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Departments</option>
+                  <option>Electrical Maintenance</option>
+                  <option>Plumbing Maintenance</option>
+                  <option>General Maintenance</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Location / Building</label>
+                <select id="f-location" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Locations</option>
+                  <option>Main Building</option>
+                  <option>Block A</option>
+                  <option>Block B</option>
+                  <option>Administrative Block</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Shift</label>
+                <select id="f-shift" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Shifts</option>
+                  <option>General</option>
+                  <option>First Shift</option>
+                  <option>Second Shift</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Status</label>
+                <select id="f-status" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                  <option>All Status</option>
+                  <option>Present</option>
+                  <option>Absent</option>
+                  <option>On Leave</option>
+                </select>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="applyFilters()" class="flex-1 px-3 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700"><i class="fa-solid fa-magnifying-glass mr-1.5"></i>Search</button>
+                <button onclick="resetFilters()" class="flex-1 px-3 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50"><i class="fa-solid fa-rotate-left mr-1.5"></i>Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ATTENDANCE LIST -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
+              <h2 class="font-semibold text-slate-800 flex items-center gap-2">Attendance List <i class="fa-regular fa-circle-question text-slate-300 text-xs" title="Daily check-in/out records"></i></h2>
+              <div class="flex items-center gap-2">
+                <button onclick="openMark()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50"><i class="fa-solid fa-user-check mr-1.5"></i>Mark Attendance</button>
+                <button onclick="exportCSV()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-emerald-300 text-emerald-700 hover:bg-emerald-50"><i class="fa-solid fa-file-export mr-1.5"></i>Export</button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-[11px] uppercase text-slate-500 bg-slate-50 border-b border-slate-100">
+                    <th class="px-4 py-3">S.No</th>
+                    <th class="px-4 py-3">Employee ID</th>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Department</th>
+                    <th class="px-4 py-3">Shift</th>
+                    <th class="px-4 py-3">Check In</th>
+                    <th class="px-4 py-3">Check Out</th>
+                    <th class="px-4 py-3">Total Hours</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Remarks</th>
+                    <th class="px-4 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceBody" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+            <div class="px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 text-sm text-slate-600">
+              <div id="paginationInfo">Showing 1 to 10 of 18 records</div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-400 mr-2">10 per page</span>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angle-left text-xs"></i></button>
+                <button class="h-8 w-8 rounded-lg bg-blue-600 text-white font-medium">1</button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50">2</button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angle-right text-xs"></i></button>
+                <button class="h-8 w-8 rounded-lg border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-angles-right text-xs"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM NOTE -->
+          <div class="bg-blue-50 border border-blue-100 rounded-xl px-5 py-3 flex items-start gap-3 text-xs text-blue-800">
+            <i class="fa-solid fa-circle-info mt-0.5"></i>
+            <span>Note: Attendance is calculated based on check in and check out time. Grace time is 15 minutes after shift start time.</span>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="space-y-5">
+
+          <!-- TODAY'S ATTENDANCE SUMMARY -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-4">Today's Attendance Summary</h3>
+            <div class="flex items-center justify-center relative">
+              <svg width="150" height="150" viewBox="0 0 150 150" class="donut">
+                <circle cx="75" cy="75" r="55" fill="none" stroke="#e2e8f0" stroke-width="18"></circle>
+                <circle cx="75" cy="75" r="55" fill="none" stroke="#22c55e" stroke-width="18"
+                  stroke-linecap="round"
+                  style="stroke-dasharray: 287.9 345.6;"></circle>
+                <circle cx="75" cy="75" r="55" fill="none" stroke="#ef4444" stroke-width="18"
+                  stroke-linecap="round"
+                  style="stroke-dasharray: 38.4 345.6; stroke-dashoffset: -287.9;"></circle>
+                <circle cx="75" cy="75" r="55" fill="none" stroke="#f97316" stroke-width="18"
+                  stroke-linecap="round"
+                  style="stroke-dasharray: 19.2 345.6; stroke-dashoffset: -326.3;"></circle>
+              </svg>
+              <div class="absolute text-center">
+                <div class="text-2xl font-bold text-slate-800">18</div>
+                <div class="text-[11px] text-slate-400">Total</div>
+              </div>
+            </div>
+            <ul class="mt-4 space-y-2 text-xs">
+              <li class="flex items-center justify-between"><span class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Present</span><span class="font-semibold text-slate-700">15 (83.33%)</span></li>
+              <li class="flex items-center justify-between"><span class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>Absent</span><span class="font-semibold text-slate-700">2 (11.11%)</span></li>
+              <li class="flex items-center justify-between"><span class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-orange-500"></span>On Leave</span><span class="font-semibold text-slate-700">1 (5.56%)</span></li>
+            </ul>
+          </div>
+
+          <!-- SHIFT WISE SUMMARY -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-3">Shift Wise Summary</h3>
+            <ul class="space-y-3 text-xs text-slate-600">
+              <li class="flex items-center justify-between">
+                <span>General Shift <span class="text-slate-400">(09:00 AM - 06:00 PM)</span></span>
+                <span class="font-semibold text-slate-800 bg-slate-100 rounded-full px-2.5 py-0.5">16</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>First Shift <span class="text-slate-400">(07:00 AM - 03:00 PM)</span></span>
+                <span class="font-semibold text-slate-800 bg-slate-100 rounded-full px-2.5 py-0.5">1</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Second Shift <span class="text-slate-400">(02:00 PM - 10:00 PM)</span></span>
+                <span class="font-semibold text-slate-800 bg-slate-100 rounded-full px-2.5 py-0.5">1</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- QUICK ACTIONS -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-3">Quick Actions</h3>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="openMark()" class="text-left text-xs px-3 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-user-check block mb-1 text-blue-600"></i>Mark Today Attendance</button>
+              <button class="text-left text-xs px-3 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50"><i class="fa-regular fa-calendar-days block mb-1 text-blue-600"></i>Attendance Calendar</button>
+              <button class="text-left text-xs px-3 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-file-lines block mb-1 text-blue-600"></i>Leave Requests</button>
+              <button class="text-left text-xs px-3 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-chart-simple block mb-1 text-blue-600"></i>Attendance Report</button>
+            </div>
+          </div>
+
+          <!-- ATTENDANCE LEGEND -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-800 mb-3">Attendance Legend</h3>
+            <ul class="space-y-2.5 text-xs text-slate-600">
+              <li class="flex items-start gap-2"><span class="h-2.5 w-2.5 rounded-full bg-emerald-500 mt-1"></span><span><b class="text-slate-700">Present</b> — On time or within grace time</span></li>
+              <li class="flex items-start gap-2"><span class="h-2.5 w-2.5 rounded-full bg-orange-500 mt-1"></span><span><b class="text-slate-700">Late</b> — Check in after grace time</span></li>
+              <li class="flex items-start gap-2"><span class="h-2.5 w-2.5 rounded-full bg-red-500 mt-1"></span><span><b class="text-slate-700">Absent</b> — No check in for the day</span></li>
+              <li class="flex items-start gap-2"><span class="h-2.5 w-2.5 rounded-full bg-purple-500 mt-1"></span><span><b class="text-slate-700">On Leave</b> — Approved leave</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div id="viewModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <h3 class="font-bold text-lg text-slate-800">Attendance Details</h3>
+      <button onclick="closeModal('viewModal')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-6 space-y-2.5 text-sm" id="viewBody"></div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="editModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <h3 class="font-bold text-lg text-slate-800">Edit Attendance — <span id="e-empname"></span></h3>
+      <button onclick="closeModal('editModal')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-6 space-y-4 text-sm">
+      <input type="hidden" id="e-id" />
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-xs font-semibold text-slate-500">Check In</label>
+          <input id="e-checkin" type="time" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-500">Check Out</label>
+          <input id="e-checkout" type="time" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+        </div>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-500">Status</label>
+        <select id="e-status" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+          <option>Present</option>
+          <option>Absent</option>
+          <option>On Leave</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-500">Remarks</label>
+        <input id="e-remarks" type="text" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="closeModal('editModal')" class="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50">Cancel</button>
+        <button onclick="saveEdit()" class="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARK ATTENDANCE MODAL -->
+<div id="markModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <h3 class="font-bold text-lg text-slate-800">Mark Attendance</h3>
+      <button onclick="closeModal('markModal')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-6 space-y-4 text-sm">
+      <div>
+        <label class="text-xs font-semibold text-slate-500">Employee</label>
+        <select id="mk-emp" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></select>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-500">Status</label>
+        <div class="mt-1 flex gap-2">
+          <button type="button" onclick="setMarkStatus('Present')" id="mk-btn-present" class="flex-1 px-3 py-2 rounded-lg border text-sm font-medium">Present</button>
+          <button type="button" onclick="setMarkStatus('Absent')" id="mk-btn-absent" class="flex-1 px-3 py-2 rounded-lg border text-sm font-medium">Absent</button>
+          <button type="button" onclick="setMarkStatus('On Leave')" id="mk-btn-leave" class="flex-1 px-3 py-2 rounded-lg border text-sm font-medium">On Leave</button>
+        </div>
+      </div>
+      <div id="mk-present-fields" class="grid grid-cols-2 gap-4 hidden">
+        <div>
+          <label class="text-xs font-semibold text-slate-500">Check In</label>
+          <input id="mk-checkin" type="time" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-500">Check Out</label>
+          <input id="mk-checkout" type="time" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+        </div>
+      </div>
+      <div id="mk-leave-fields" class="hidden">
+        <label class="text-xs font-semibold text-slate-500">Leave Type</label>
+        <select id="mk-leavetype" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+          <option>Casual Leave</option>
+          <option>Sick Leave</option>
+          <option>Earned Leave</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-500">Remarks</label>
+        <input id="mk-remarks" type="text" placeholder="Optional" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="closeModal('markModal')" class="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50">Cancel</button>
+        <button onclick="saveMark()" class="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">Save Attendance</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-6 hidden bg-emerald-600 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium z-50">
+  <i class="fa-solid fa-circle-check mr-2"></i><span id="toast-text"></span>
+</div>
+
+<script>
+const STATUS_STYLE = {
+  Present: "bg-emerald-100 text-emerald-700",
+  Absent: "bg-red-100 text-red-700",
+  "On Leave": "bg-orange-100 text-orange-700",
+};
+
+const AVATAR_COLORS = ["bg-blue-100 text-blue-700","bg-purple-100 text-purple-700","bg-emerald-100 text-emerald-700","bg-amber-100 text-amber-700","bg-pink-100 text-pink-700"];
+
+let attendance = [
+ {empId:"ELEC001", name:"Mr. Karthik", dept:"Electrical Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:02 AM", checkOut:"06:05 PM", hours:"9h 03m", status:"Present", remarks:"-"},
+ {empId:"ELEC002", name:"Mr. Rajesh", dept:"Electrical Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:10 AM", checkOut:"06:00 PM", hours:"8h 50m", status:"Present", remarks:"-"},
+ {empId:"ELEC003", name:"Mr. Kumar", dept:"Plumbing Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:01 AM", checkOut:"06:12 PM", hours:"9h 11m", status:"Present", remarks:"-"},
+ {empId:"ELEC004", name:"Mr. Mohan", dept:"Plumbing Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:05 AM", checkOut:"06:00 PM", hours:"8h 55m", status:"Present", remarks:"-"},
+ {empId:"ELEC005", name:"Mr. Selvi", dept:"General Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:00 AM", checkOut:"05:58 PM", hours:"8h 58m", status:"Present", remarks:"-"},
+ {empId:"ELEC006", name:"Mr. Prakash", dept:"Electrical Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"-", checkOut:"-", hours:"-", status:"Absent", remarks:"No Show"},
+ {empId:"ELEC007", name:"Mr. Arul", dept:"Plumbing Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:15 AM", checkOut:"-", hours:"-", status:"On Leave", remarks:"Casual Leave"},
+ {empId:"ELEC008", name:"Mr. Vignesh", dept:"General Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:07 AM", checkOut:"06:01 PM", hours:"8h 54m", status:"Present", remarks:"-"},
+ {empId:"ELEC009", name:"Mr. Dinesh", dept:"Electrical Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:03 AM", checkOut:"06:10 PM", hours:"9h 07m", status:"Present", remarks:"-"},
+ {empId:"ELEC010", name:"Mr. Suresh", dept:"Plumbing Maintenance", shift:"General", shiftTime:"09:00 AM - 06:00 PM", checkIn:"09:00 AM", checkOut:"06:02 PM", hours:"9h 02m", status:"Present", remarks:"-"},
+];
+
+const summary = [
+  {label:"Total Electricians", value:"18", sub:"All Active", icon:"fa-users", color:"text-blue-600 bg-blue-50"},
+  {label:"Present Today", value:"15", sub:"83.33%", icon:"fa-user-check", color:"text-emerald-600 bg-emerald-50"},
+  {label:"Absent Today", value:"2", sub:"11.11%", icon:"fa-user-xmark", color:"text-red-600 bg-red-50"},
+  {label:"On Leave", value:"1", sub:"5.56%", icon:"fa-clock", color:"text-orange-600 bg-orange-50"},
+  {label:"Avg. Attendance", value:"98.4%", sub:"This Month", icon:"fa-calendar-check", color:"text-purple-600 bg-purple-50"},
+];
+
+function renderSummary(){
+  document.getElementById('summaryCards').innerHTML = summary.map(c => `
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div class="h-9 w-9 rounded-lg ${c.color} flex items-center justify-center mb-2"><i class="fa-solid ${c.icon}"></i></div>
+      <div class="text-2xl font-bold text-slate-800">${c.value}</div>
+      <div class="text-sm font-medium text-slate-600">${c.label}</div>
+      <div class="text-[11px] text-slate-400 mt-0.5">${c.sub}</div>
+    </div>`).join('');
+}
+
+function badge(text, cls){ return `<span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-semibold ${cls}">${text}</span>`; }
+function initials(name){ return name.replace("Mr. ","").slice(0,1); }
+
+function renderTable(list){
+  const body = document.getElementById('attendanceBody');
+  if(list.length === 0){
+    body.innerHTML = `<tr><td colspan="11" class="text-center text-slate-400 py-10">No attendance records match the current filters.</td></tr>`;
+    return;
+  }
+  body.innerHTML = list.map((a,i) => `
+    <tr class="hover:bg-slate-50">
+      <td class="px-4 py-3 text-slate-500">${i+1}</td>
+      <td class="px-4 py-3 font-semibold text-blue-700">${a.empId}</td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <div class="h-7 w-7 rounded-full ${AVATAR_COLORS[i % AVATAR_COLORS.length]} flex items-center justify-center text-xs font-bold">${initials(a.name)}</div>
+          <span class="font-medium text-slate-800">${a.name}</span>
+        </div>
+      </td>
+      <td class="px-4 py-3 text-slate-600">${a.dept}</td>
+      <td class="px-4 py-3 text-xs text-slate-600">${a.shift}<div class="text-slate-400">${a.shiftTime}</div></td>
+      <td class="px-4 py-3 text-xs text-slate-600">${a.checkIn}</td>
+      <td class="px-4 py-3 text-xs text-slate-600">${a.checkOut}</td>
+      <td class="px-4 py-3 text-xs text-slate-600">${a.hours}</td>
+      <td class="px-4 py-3">${badge(a.status, STATUS_STYLE[a.status])}</td>
+      <td class="px-4 py-3 text-xs text-slate-500">${a.remarks}</td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <button onclick="openView('${a.empId}')" class="h-8 w-8 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-500"><i class="fa-regular fa-eye"></i></button>
+          <button onclick="openEdit('${a.empId}')" class="h-8 w-8 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-500"><i class="fa-solid fa-pen"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function applyFilters(){
+  const dept = document.getElementById('f-dept').value;
+  const shift = document.getElementById('f-shift').value;
+  const status = document.getElementById('f-status').value;
+  const filtered = attendance.filter(a => {
+    if(dept !== "All Departments" && a.dept !== dept) return false;
+    if(shift !== "All Shifts" && a.shift !== shift) return false;
+    if(status !== "All Status" && a.status !== status) return false;
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function resetFilters(){
+  document.getElementById('f-date').value = "2026-05-16";
+  document.getElementById('f-dept').value = "All Departments";
+  document.getElementById('f-location').value = "All Locations";
+  document.getElementById('f-shift').value = "All Shifts";
+  document.getElementById('f-status').value = "All Status";
+  renderTable(attendance);
+}
+
+function exportCSV(){
+  const rows = [["Employee ID","Name","Department","Shift","Check In","Check Out","Total Hours","Status","Remarks"]];
+  attendance.forEach(a => rows.push([a.empId,a.name,a.dept,a.shift,a.checkIn,a.checkOut,a.hours,a.status,a.remarks]));
+  const csv = rows.map(r => r.map(v => `"${v}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "attendance_export.csv";
+  link.click();
+}
+
+function openView(empId){
+  const a = attendance.find(x => x.empId === empId);
+  document.getElementById('viewBody').innerHTML = `
+    <div class="flex justify-between"><span class="text-slate-400">Employee ID</span><span class="font-medium">${a.empId}</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Name</span><span class="font-medium">${a.name}</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Department</span><span class="font-medium">${a.dept}</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Shift</span><span class="font-medium">${a.shift} (${a.shiftTime})</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Date</span><span class="font-medium">16-05-2026</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Check In</span><span class="font-medium">${a.checkIn}</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Check Out</span><span class="font-medium">${a.checkOut}</span></div>
+    <div class="flex justify-between"><span class="text-slate-400">Total Hours</span><span class="font-medium">${a.hours}</span></div>
+    <div class="flex justify-between items-center"><span class="text-slate-400">Status</span>${badge(a.status, STATUS_STYLE[a.status])}</div>
+    <div class="flex justify-between"><span class="text-slate-400">Remarks</span><span class="font-medium">${a.remarks}</span></div>
+  `;
+  openModal('viewModal');
+}
+
+function openEdit(empId){
+  const a = attendance.find(x => x.empId === empId);
+  document.getElementById('e-id').value = empId;
+  document.getElementById('e-empname').textContent = a.name;
+  document.getElementById('e-checkin').value = to24(a.checkIn);
+  document.getElementById('e-checkout').value = to24(a.checkOut);
+  document.getElementById('e-status').value = a.status;
+  document.getElementById('e-remarks').value = a.remarks === "-" ? "" : a.remarks;
+  openModal('editModal');
+}
+
+function to24(t){
+  if(!t || t === "-") return "";
+  const [time, period] = t.split(" ");
+  let [h, m] = time.split(":").map(Number);
+  if(period === "PM" && h !== 12) h += 12;
+  if(period === "AM" && h === 12) h = 0;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+function to12(t){
+  if(!t) return "-";
+  let [h, m] = t.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} ${period}`;
+}
+function calcHours(inT, outT){
+  if(!inT || !outT) return "-";
+  const [ih, im] = inT.split(":").map(Number);
+  const [oh, om] = outT.split(":").map(Number);
+  let mins = (oh*60+om) - (ih*60+im);
+  if(mins < 0) return "-";
+  return `${Math.floor(mins/60)}h ${String(mins%60).padStart(2,'0')}m`;
+}
+
+function saveEdit(){
+  const empId = document.getElementById('e-id').value;
+  const a = attendance.find(x => x.empId === empId);
+  const ci = document.getElementById('e-checkin').value;
+  const co = document.getElementById('e-checkout').value;
+  a.checkIn = to12(ci);
+  a.checkOut = to12(co);
+  a.hours = calcHours(ci, co);
+  a.status = document.getElementById('e-status').value;
+  a.remarks = document.getElementById('e-remarks').value || "-";
+  closeModal('editModal');
+  applyFilters();
+  showToast(`Attendance updated for ${a.name}`);
+}
+
+let markStatus = "Present";
+function openMark(){
+  const sel = document.getElementById('mk-emp');
+  sel.innerHTML = attendance.map(a => `<option value="${a.empId}">${a.empId} — ${a.name}</option>`).join('');
+  setMarkStatus("Present");
+  document.getElementById('mk-checkin').value = "";
+  document.getElementById('mk-checkout').value = "";
+  document.getElementById('mk-remarks').value = "";
+  openModal('markModal');
+}
+function setMarkStatus(status){
+  markStatus = status;
+  ["present","absent","leave"].forEach(k => {
+    const btn = document.getElementById(`mk-btn-${k}`);
+    btn.className = "flex-1 px-3 py-2 rounded-lg border text-sm font-medium " + (
+      (k === "present" && status === "Present") ||
+      (k === "absent" && status === "Absent") ||
+      (k === "leave" && status === "On Leave")
+        ? "bg-blue-600 text-white border-blue-600" : "border-slate-300 text-slate-600 hover:bg-slate-50"
+    );
+  });
+  document.getElementById('mk-present-fields').classList.toggle('hidden', status !== "Present");
+  document.getElementById('mk-leave-fields').classList.toggle('hidden', status !== "On Leave");
+}
+
+function saveMark(){
+  const empId = document.getElementById('mk-emp').value;
+  const a = attendance.find(x => x.empId === empId);
+  a.status = markStatus;
+  if(markStatus === "Present"){
+    const ci = document.getElementById('mk-checkin').value;
+    const co = document.getElementById('mk-checkout').value;
+    a.checkIn = to12(ci) || "-";
+    a.checkOut = to12(co) || "-";
+    a.hours = calcHours(ci, co);
+    a.remarks = document.getElementById('mk-remarks').value || "-";
+  } else if(markStatus === "Absent"){
+    a.checkIn = "-"; a.checkOut = "-"; a.hours = "-";
+    a.remarks = document.getElementById('mk-remarks').value || "No Show";
+  } else {
+    a.checkIn = "-"; a.checkOut = "-"; a.hours = "-";
+    a.remarks = document.getElementById('mk-leavetype').value;
+  }
+  closeModal('markModal');
+  applyFilters();
+  showToast(`Attendance marked for ${a.name}`);
+}
+
+function openModal(id){
+  document.getElementById(id).classList.remove('hidden');
+  document.getElementById(id).classList.add('flex');
+}
+function closeModal(id){
+  document.getElementById(id).classList.add('hidden');
+  document.getElementById(id).classList.remove('flex');
+}
+function showToast(msg){
+  document.getElementById('toast-text').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.remove('hidden');
+  setTimeout(() => t.classList.add('hidden'), 3000);
+}
+
+renderSummary();
+renderTable(attendance);
+</script>
+</body>
+</html>

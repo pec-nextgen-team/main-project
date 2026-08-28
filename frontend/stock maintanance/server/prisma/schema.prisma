@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EmploymentType {
+  Permanent
+  Contract
+  PartTime
+  Outsourced
+}
+
+enum ElectricianStatus {
+  Active
+  Inactive
+  OnLeave
+}
+
+model Electrician {
+  id                    String            @id @default(cuid())
+  employeeId            String            @unique
+  fullName              String
+  dateOfBirth           DateTime
+  gender                String
+  phoneNumber           String
+  email                 String?
+  aadhaarNumber         String?
+  panNumber             String?
+  address               String
+  city                  String
+  state                 String
+  pinCode               String
+
+  department            String
+  employmentType        String
+  dateOfJoining         DateTime
+  reportingTo           String
+  workLocation          String
+  shift                 String?
+  status                String            @default("Active")
+
+  specialization        String[]
+  skills                String
+
+  emergencyContactName  String
+  emergencyRelationship String
+  emergencyPhone        String
+  alternatePhone        String?
+
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  @@map("electricians")
+}
+
+enum StockMovementType {
+  IN
+  OUT
+  ADJUSTMENT
+}
+
+model InventoryItem {
+  id              String              @id @default(cuid())
+  itemCode        String              @unique
+  itemName        String
+  category        String
+  subCategory     String?
+  unit            String
+  location        String
+  openingStock    Int
+  availableStock  Int
+  unitPrice       Decimal             @db.Decimal(10, 2)
+  reorderLevel    Int                 @default(20)
+  status          String              @default("In Stock")
+  expiryDate      DateTime?
+
+  movements       StockMovement[]
+
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@map("inventory_items")
+}
+
+model StockMovement {
+  id          String            @id @default(cuid())
+  item        InventoryItem     @relation(fields: [itemId], references: [id])
+  itemId      String
+  type        StockMovementType
+  quantity    Int
+  note        String?
+  createdAt   DateTime          @default(now())
+
+  @@map("stock_movements")
+}
+
+model Supplier {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  email     String?
+  address   String?
+  status    String   @default("Active")
+  createdAt DateTime @default(now())
+
+  @@map("suppliers")
+}
