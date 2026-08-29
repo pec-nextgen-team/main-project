@@ -1,7 +1,20 @@
-const jobRoutes = require('./routes/jobRoutes');
+
+require('dotenv').config();
+
+// Startup Guard: Validate critical environment variables before bootstrapping
+const REQUIRED_ENV_VARS = ['JWT_SECRET'];
+
+for (const envVar of REQUIRED_ENV_VARS) {
+  if (!process.env[envVar] || process.env[envVar].trim() === '') {
+    console.error(`\x1b[31m[FATAL ERROR] Missing required environment variable: ${envVar}\x1b[0m`);
+    console.error(`Please set ${envVar} in your .env file before starting the server.`);
+    process.exit(1);
+  }
+}
+
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+const jobRoutes = require('./routes/jobRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
 const healthRoutes = require('./routes/healthRoutes');
 const complaintStatusRoutes = require('./routes/complaintStatusRoutes');
