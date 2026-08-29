@@ -1,0 +1,6 @@
+{
+  "name": "Panimalar Engineering College - Repair & Maintenance Management System",
+  "description": "Institutional repair and maintenance management system for Panimalar Engineering College covering complaint raising, HOD approval, electrician assignment, and job tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
