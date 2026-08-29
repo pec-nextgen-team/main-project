@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+const jobRoutes = require('./routes/jobRoutes');
+const complaintRoutes = require('./routes/complaintRoutes');
 const healthRoutes = require('./routes/healthRoutes');
+const complaintStatusRoutes = require('./routes/complaintStatusRoutes');
 const authRoutes = require('./routes/authRoutes');
 const approvalRoutes = require('./routes/approvalRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
@@ -18,6 +21,9 @@ app.use(express.json());
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/approvals', approvalRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/complaints', complaintStatusRoutes);
+app.use('/api/jobs', jobRoutes);
 app.use('/api/tickets', ticketRoutes);
 
 // Global 404 Handler
