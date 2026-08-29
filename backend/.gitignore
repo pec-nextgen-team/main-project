@@ -1,0 +1,12 @@
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Generated Prisma client
+generated/
+
+# AI tooling
+.claude/
