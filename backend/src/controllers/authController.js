@@ -192,11 +192,6 @@ exports.getMe = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch user profile', error: error.message });
   }
 };
-// ... existing exports.getMe function finishes above this line
-
-// @desc    Logout user
-// @route   POST /api/auth/logout
-// @access  Public
 exports.logout = async (req, res) => {
   try {
     res.status(200).json({
