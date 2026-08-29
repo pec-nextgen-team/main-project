@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import MainLayout from './components/layout/MainLayout';
 import LoginPage from './pages/auth/LoginPage';
 import RaiseComplaintPage from './pages/complaints/RaiseComplaintPage';
@@ -8,7 +8,6 @@ import AssignElectricianPage from './pages/tickets/AssignElectricianPage';
 import MyJobsPage from './pages/jobs/MyJobsPage';
 
 function AppContent() {
-  const { isAuthenticated, role } = useAuth();
   const [currentRoute, setCurrentRoute] = useState('raise-complaint');
 
   // Handle route switching

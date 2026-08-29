@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Shield, UserCircle, LogOut, ChevronDown, Check } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { ROLES } from '../../services/authService';
 
 export function TopHeader({ onToggleMobile, onNavigate }) {
   const { user, role, switchRole, logout, availableRoles } = useAuth();

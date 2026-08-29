@@ -1,5 +1,5 @@
 import React from 'react';
-import { Inbox, AlertCircle, FileSearch, CheckCircle2 } from 'lucide-react';
+import { Inbox } from 'lucide-react';
 import Button from './Button';
 
 export function EmptyState({

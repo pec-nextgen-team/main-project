@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { 
   Wrench, 
   CheckCircle2, 
-  Clock, 
   Play, 
   CheckCheck, 
   Search, 
   RefreshCw, 
   MapPin, 
   AlertCircle,
-  FileText,
   User,
   History
 } from 'lucide-react';
@@ -20,7 +18,7 @@ import Button from '../../components/common/Button';
 import EmptyState from '../../components/common/EmptyState';
 import Modal from '../../components/common/Modal';
 import WorkflowTracker from '../../components/common/WorkflowTracker';
-import { FormField, Textarea, Input, Select } from '../../components/common/FormControls';
+import { FormField, Textarea, Input } from '../../components/common/FormControls';
 import ticketService from '../../services/ticketService';
 import { COMPLAINT_STATUS } from '../../services/complaintService';
 import { useAuth } from '../../context/AuthContext';
@@ -150,6 +148,7 @@ export function MyJobsPage({ onNavigateToAssign }) {
             variant="secondary"
             size="sm"
             onClick={loadJobs}
+            loading={isLoading}
             icon={RefreshCw}
           >
             Refresh Jobs

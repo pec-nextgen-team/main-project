@@ -4,15 +4,8 @@ import {
   XCircle, 
   Eye, 
   Search, 
-  Clock, 
   RefreshCw, 
-  ShieldCheck,
-  AlertCircle,
-  Building,
-  MapPin,
-  Calendar,
-  User,
-  Filter
+  ShieldCheck
 } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import Card from '../../components/common/Card';
@@ -21,7 +14,7 @@ import Button from '../../components/common/Button';
 import EmptyState from '../../components/common/EmptyState';
 import Modal from '../../components/common/Modal';
 import WorkflowTracker from '../../components/common/WorkflowTracker';
-import { FormField, Textarea, Input } from '../../components/common/FormControls';
+import { FormField, Textarea } from '../../components/common/FormControls';
 import approvalService from '../../services/approvalService';
 import { COMPLAINT_STATUS } from '../../services/complaintService';
 import { useAuth } from '../../context/AuthContext';
@@ -132,6 +125,7 @@ export function PendingApprovalsPage({ onNavigateToRaise }) {
             variant="secondary"
             size="sm"
             onClick={loadApprovals}
+            loading={isLoading}
             icon={RefreshCw}
           >
             Refresh Queue

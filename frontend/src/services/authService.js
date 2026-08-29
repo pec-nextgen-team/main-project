@@ -76,7 +76,7 @@ export const authService = {
           return userObj;
         }
       } catch (err) {
-        throw new Error(err.message || 'Authentication failed on server.');
+        throw new Error(err.message || 'Authentication failed on server.', { cause: err });
       }
     }
 

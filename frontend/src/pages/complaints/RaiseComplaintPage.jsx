@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { 
-  Building2, 
   MapPin, 
   Wrench, 
-  AlertTriangle, 
   Phone, 
   Mail, 
   CheckCircle2, 
   RotateCcw, 
   Send,
-  FileText,
-  Upload
+  FileText
 } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import Card from '../../components/common/Card';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Lock, User, Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, AlertCircle } from 'lucide-react';
 import PanimalarLogo from '../../components/branding/PanimalarLogo';
 import AnniversaryBadge from '../../components/branding/AnniversaryBadge';
 import { FormField, Input, Select } from '../../components/common/FormControls';
