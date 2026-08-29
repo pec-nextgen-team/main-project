@@ -90,7 +90,6 @@ export function WorkflowTracker({ currentStatus, className = '', id }) {
           const Icon = stage.icon;
           const isPassed = !isRejected && activeIndex > idx;
           const isCurrent = !isRejected && (activeIndex === idx || (idx === 3 && currentStatus === COMPLAINT_STATUS.ASSIGNED));
-          const isUpcoming = !isRejected && activeIndex < idx;
 
           let badgeBg = 'bg-slate-100 text-slate-400 border-slate-200';
           let textColor = 'text-slate-500';

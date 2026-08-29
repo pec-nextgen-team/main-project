@@ -4,11 +4,8 @@ import {
   TicketCheck, 
   Search, 
   RefreshCw, 
-  Wrench, 
-  Calendar, 
   CheckCircle2, 
   AlertCircle,
-  Clock,
   UserPlus
 } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
@@ -89,7 +86,9 @@ export function AssignElectricianPage({ onNavigateToApprovals }) {
 
   // Submit assignment
   const handleAssignSubmit = async (e) => {
-    e.preventDefault();
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
     if (!electricianName.trim()) {
       setFormError('Please enter the electrician / technician staff name.');
       return;
@@ -130,6 +129,7 @@ export function AssignElectricianPage({ onNavigateToApprovals }) {
             variant="secondary"
             size="sm"
             onClick={loadTickets}
+            loading={isLoading}
             icon={RefreshCw}
           >
             Refresh Queue
