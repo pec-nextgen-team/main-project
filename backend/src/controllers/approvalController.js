@@ -1,5 +1,5 @@
 const prisma = require('../config/db');
-
+const { createAuditLog } = require('../services/auditLogService');
 // GET /api/approvals/pending
 // HOD only
 exports.getPendingApprovals = async (req, res) => {
@@ -99,6 +99,17 @@ exports.updateApproval = async (req, res) => {
             : null,
       },
     });
+    await createAuditLog({
+  complaintId: id,
+  userId: req.user.userId,
+  action: status === 'APPROVED' ? 'APPROVED' : 'REJECTED',
+  description:
+    status === 'APPROVED'
+      ? 'Complaint approved by HOD'
+      : `Complaint rejected by HOD: ${rejectionReason.trim()}`,
+  oldValue: complaint.hodApprovalStatus,
+  newValue: status,
+});
 
     return res.status(200).json({
       success: true,
