@@ -1,4 +1,11 @@
-const prisma = require('../config/db');
+const { PrismaClient } = require("@prisma/client");
+const { PrismaPg } = require("@prisma/adapter-pg");
+
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const prisma = new PrismaClient({ adapter });
 
 async function createAuditLog({
   complaintId,
@@ -6,7 +13,7 @@ async function createAuditLog({
   action,
   description,
   oldValue,
-  newValue,
+  newValue
 }) {
   try {
     await prisma.auditLog.create({
@@ -16,14 +23,14 @@ async function createAuditLog({
         action,
         description,
         oldValue,
-        newValue,
-      },
+        newValue
+      }
     });
   } catch (error) {
-    console.error('Audit log failed:', error.message);
+    console.log("Audit log failed:", error.message);
   }
 }
 
 module.exports = {
-  createAuditLog,
+  createAuditLog
 };
